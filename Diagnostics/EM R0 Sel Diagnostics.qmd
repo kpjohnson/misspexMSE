@@ -1,0 +1,162 @@
+---
+title: "EM R0 Selex Diagnostics"
+format:
+  html:
+    toc: true
+---
+
+## Abbreviations of Note
+
+R0Est or SelEst = SS3 is allowed to estimate R0 or Selectivity parameters
+
+R0Pre or SelPre = SS3 is told to fix R0 or Selectivity parameters
+
+## SSB plots for all Scenarios (before fixes)
+
+![](Plots/EM%20R0%20Sel%20SSB%20Plots.png){fig-align="center"}
+
+### SSB plots Midpt OM Sel Fix
+
+![](Plots/Midpt%20Exp%20EM%20R0%20Sel%20SSB%20Plots.png)
+
+### SSB plots Midpt + Mintail fixes
+
+![](Plots/Mintail Exp EM R0 Sel SSB Plots.png)
+
+## Depletion plots for all Scenarios (before fixes)
+
+![](Plots/EM%20R0%20Sel%20Depl%20Plots.png){fig-align="center"}
+
+### Depl plots Midpt OM Sel Fix
+
+![](Plots/Midpt%20Exp%20EM%20R0%20Sel%20Depl%20Plots.png)
+
+### Depl plots Midpt + Mintail fixes
+
+![](Plots/Mintail Exp EM R0 Sel Depl Plots.png)
+
+## Logistic Selectivity Parameters
+
+```{r logsel}
+
+# Simulated selectivity data
+selectivity <- c(0.000601415, 0.000929986, 0.00143781, 0.00222231, 0.00343338,
+                 0.00530093, 0.00817598, 0.0125906, 0.0193425, 0.0296066,
+                 0.0450669, 0.0680346, 0.101464, 0.148698, 0.212715,
+                 0.29475, 0.392644, 0.5, 0.607356, 0.70525,
+                 0.787285, 0.851302, 0.898536, 0.931965, 0.954933,
+                 0.970393, 0.980658, 0.987409, 0.991824, 0.994699,
+                 0.996567, 0.997778, 0.998562)
+
+# Define length bins
+length_values <- seq(10, by = 2, length.out = length(selectivity))
+
+# Define the logistic selectivity function
+logistic_selectivity <- function(len, p1, p2) {
+  S <- 1 / (1 + exp(-log(19) * (len - p1) / p2))
+  return(S)
+}
+
+# Fit the logistic model to the data
+fit <- nls(selectivity ~ logistic_selectivity(length_values, p1, p2),
+           start = list(p1 = mean(length_values), p2 = 10),
+           algorithm = "port")
+
+# Display summary of the fit
+summary(fit)
+
+# Extract parameter estimates
+p1_est <- coef(fit)["p1"]
+p2_est <- coef(fit)["p2"]
+
+# Print parameter estimates
+cat("Estimated p1 (length at 50% selection):", p1_est, "\n")
+cat("Estimated p2 (length difference for 50%-95% selection):", p2_est, "\n")
+
+# Generate fitted values using the estimated parameters
+fitted_selectivity <- logistic_selectivity(length_values, p1_est, p2_est)
+
+# Plot observed vs fitted selectivity
+plot(length_values, selectivity, pch = 16, col = "blue", main = "Selectivity Fit",
+     xlab = "Length (cm)", ylab = "Selectivity")
+lines(length_values, fitted_selectivity, col = "red", lwd = 2)
+legend("bottomright", legend = c("Observed", "Fitted"),
+       col = c("blue", "red"), pch = c(16, NA), lty = c(NA, 1), lwd = c(NA, 2))
+
+# Calculate midpoints of length bins
+midpoints <- length_values + 1  # Midpoints are 1 cm after each bin start
+
+# Calculate selectivity at midpoints using the fitted parameters
+midpoint_selectivity <- logistic_selectivity(midpoints, p1_est, p2_est)
+
+
+
+
+```
+
+## OM vs. EM Selectivity Curves
+
+### Before any fixes
+
+![](Plots/EM%20R0%20Sel%20Sel%20Curve%20Plots.png){fig-align="center"}
+
+### OM uses midpoint of length bins for selex?
+
+![](Plots/Minimal%20Midpt%20Exp%20EM%20R0%20Sel%20Sel%20Curve%20Plots.png)
+
+### Midpt + Mintail fixes
+
+![](Plots/Mintail EM R0 Sel Sel Curve Plots.png)
+
+## EM Parameter Distributions across all MSE simulations
+
+### Before fixes:
+
+![](Plots/EM%20R0%20Sel%20Parameter%20Distributions.png){fig-align="center"}
+
+### OM uses midpoint of length bins for selex?
+
+![](Plots/Minimal%20EM%20R0%20Sel%20Parameter%20Distributions.png)
+
+![](Plots/Midpt%20Sel%20Experiment%20EM%20R0%20Sel%20Parameter%20Distributions.png)
+
+### Midpt + mintail fixes
+
+![](Plots/Mintail EM R0 Sel Parameter Distributions.png)
+
+## Can I replicate a single sim agg length comp (high R0)?
+
+For a single run of SS3 (simulation 5).
+
+![](Plots/Example%20SS3%20Agg%20Length%20Comp.png){fig-align="left" width="50%"}
+
+My attempt to reproduce the plot above:
+
+![](Plots/Sim%205%20EM%20R0%20Sel%20Agg%20Length%20Comp%20Plots.png){fig-align="left" width="50%"}
+
+When I set min tail compression to -1, high R0 scenario (above was generated using 0):
+
+![](Plots/NegMinTail Example SS3 Agg Length Comp.png){fig-align="left" width="50%"}
+
+![](Plots/MinTail Sim 5 EM R0 Sel Agg Length Comp Plots.png){fig-align="left" width="50%"}
+
+
+## KPJ reproduced aggregated length comps all MSE sims
+
+### After midpt fix:
+
+![](Plots/EM%20R0%20Sel%20Agg%20Length%20Comp%20Plots.png){fig-align="left"}
+
+### After midpt + mintail fix:
+
+![](Plots/Mintail EM R0 Sel Agg Length Comp Plots.png)
+
+## OM vs. EM Recruitment Deviations
+
+### After midpt fixes:
+
+![](Plots/Minimal%20EM%20R0%20Sel%20RecDevs.png)
+
+### After midpt + mintail fixes: 
+
+![](Plots/Mintail Minimal EM R0 Sel RecDevs.png)
