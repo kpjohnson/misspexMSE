@@ -34,3 +34,7 @@ po/*~
 # RStudio Connect folder
 rsconnect/
 misspexMSE.Rproj
+~$MSE_Run_Tracker.xlsx
+MSE_Run_Tracker.csv
+MSE_Run_Tracker.xlsx
+Data

@@ -72,7 +72,7 @@ tidyFormat <- function(OM_Files, EM_Files, FactorColNames, OutDir) {
                       EM_Out = EM_Out)
     
     tidyFactors <- unlist(strsplit(OM_Files[f], split="/"))
-    tidyFactors <- tidyFactors[c(-1, -length(tidyFactors))]
+    tidyFactors <- tidyFactors[c(-1, -c((length(tidyFactors)-1), length(tidyFactors)))]
     
     tempOMOut <- data.frame(matrix(ncol=length(tidyFactors), nrow=nrow(Outs$OM_Out)))
     colnames(tempOMOut) <- FactorColNames
