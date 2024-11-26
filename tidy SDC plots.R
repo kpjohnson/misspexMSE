@@ -210,14 +210,14 @@ QSSB_EM$RBCyear <- factor(QSSB_EM$RBCyear, level=RBCyears)
 colnames(QSSB_EM)[5] <- "Assessment"
 
 row1 <- ggplot(QSSB_OM, aes(x=Year)) +
-  geom_ribbon(aes(ymin=ymin, ymax=ymax), fill="gray", alpha=0.50) +
-  geom_line(aes(y=middle)) + 
-  facet_grid(space="fixed", scales="free_y", rows=vars(HCR), cols=vars(Buffer, EMScenario)) +
   geom_vline(aes(xintercept=2014), 
              linetype = "dashed",
              color = "red") +
   geom_hline(aes(yintercept=middle[1]*0.20), color="darkred", linetype="dotdash") +
   geom_hline(aes(yintercept=middle[1]*0.48), color="darkgreen", linetype="dotdash") +
+  geom_ribbon(aes(ymin=ymin, ymax=ymax), fill="gray", alpha=0.50) +
+  geom_line(aes(y=middle)) + 
+  facet_grid(space="fixed", scales="free_y", rows=vars(HCR), cols=vars(Buffer, EMScenario)) +
   geom_line(data=QSSB_EM, aes(y=middle, color=Assessment, linetype=Assessment)) +
   scale_color_manual(values=rev(c("#08306b",
                                   "#4292c6",
@@ -228,18 +228,21 @@ row1 <- ggplot(QSSB_OM, aes(x=Year)) +
                                   "#3f007d"))) +
   labs(y=c("OM SSB vs. Median EM SSB")) +
   guides(color=guide_legend(title="Assessment"), linetype=guide_legend(title="Assessment")) +
-  theme(axis.title.x = element_blank())
+  theme(axis.title.x = element_blank(),
+        axis.text.x = element_text(size = 6),
+        legend.title = element_text(size = 8),
+        legend.text = element_text(size = 6))
 
 
 row2 <- ggplot(QSSB_EM, aes(x=Year, group=Assessment)) +
-  geom_ribbon(aes(ymin=ymin, ymax=ymax, fill=Assessment), alpha=0.15) +
-  geom_line(aes(y=middle, color=Assessment, linetype=Assessment)) + 
-  facet_grid(space="fixed", scales="free_y", rows=vars(HCR), cols=vars(Buffer, EMScenario)) +
   geom_vline(aes(xintercept=2014), 
              linetype = "dashed",
              color = "red") +
   geom_hline(aes(yintercept=middle[1]*0.20), color="darkred", linetype="dotdash") +
   geom_hline(aes(yintercept=middle[1]*0.48), color="darkgreen", linetype="dotdash") +
+  geom_ribbon(aes(ymin=ymin, ymax=ymax, fill=Assessment), alpha=0.15) +
+  geom_line(aes(y=middle, color=Assessment, linetype=Assessment)) + 
+  facet_grid(space="fixed", scales="free_y", rows=vars(HCR), cols=vars(Buffer, EMScenario)) +
   scale_color_manual(values = rev(c("cadetblue",
                                     "#08306b",
                                     "#4292c6",
@@ -259,10 +262,21 @@ row2 <- ggplot(QSSB_EM, aes(x=Year, group=Assessment)) +
                                    "#3f007d" 
   ))) +  
   labs(y="EM SSB Only") +
-  theme(strip.text.x = element_blank(), axis.title.x = element_blank())
+  theme(strip.text.x = element_blank(), 
+        axis.title.x = element_blank(),
+        axis.text.x = element_text(size = 6),
+        legend.title = element_text(size = 8),
+        legend.text = element_text(size = 6))
 
-grid.arrange(row1, row2)
+ssb <- grid.arrange(row1, row2)
 
+ggsave(filename = "Exp 1 SSB.png", 
+       path="Plots/Experiment 1/",
+       plot=ssb,
+       width=8.5,
+       height=5,
+       units="in",
+       dpi=300)
 
 
 # Depletion plots
@@ -294,29 +308,34 @@ QDepl_EM$RBCyear <- factor(QDepl_EM$RBCyear, level=RBCyears)
 QDepl_EM <- rename(QDepl_EM, Assessment=RBCyear)
 
 row1 <- ggplot(QDepl_OM, aes(x=Year)) +
-  geom_ribbon(aes(ymin=ymin, ymax=ymax), fill="gray", alpha=0.50) +
-  geom_line(aes(y=middle)) +
-  facet_grid(space="fixed", scales="fixed", rows=vars(HCR), cols=vars(Buffer, EMScenario)) +
   geom_vline(aes(xintercept=2014),
              linetype = "dashed",
              color = "red") +
   geom_hline(aes(yintercept=0.20), color="darkred", linetype="dotdash") +
   geom_hline(aes(yintercept=0.48), color="darkgreen", linetype="dotdash") +
+  geom_ribbon(aes(ymin=ymin, ymax=ymax), fill="gray", alpha=0.50) +
+  geom_line(aes(y=middle)) +
+  facet_grid(space="fixed", scales="fixed", rows=vars(HCR), cols=vars(Buffer, EMScenario)) +
   geom_line(data=QDepl_EM, aes(y=middle, color=Assessment, linetype=Assessment)) +
   scale_color_manual(values=rev(c("#08306b","#4292c6","#9e9ac8","#807dba","#6a51a3","#54278f","#3f007d"))) +
   labs(y=c("OM vs. Median EM Depletion")) +
   ylim(0, 1.1) +
-  theme(axis.title.x = element_blank())
+  theme(axis.title.x = element_blank(),
+        axis.text.x = element_text(size = 6),
+        legend.title = element_text(size = 8),
+        legend.text = element_text(size = 6))
 
 row2 <- ggplot(QDepl_EM, aes(x=Year, group=Assessment)) +
-  geom_ribbon(aes(ymin=ymin, ymax=ymax, fill=Assessment), alpha=0.15) +
-  geom_line(aes(y=middle, color=Assessment, linetype=Assessment)) + 
-  facet_grid(space="fixed", scales="free_y", rows=vars(HCR), cols=vars(Buffer, EMScenario)) +
   geom_vline(aes(xintercept=2014), 
              linetype = "dashed",
              color = "red") +
   geom_hline(aes(yintercept=middle[1]*0.20), color="darkred", linetype="dotdash") +
   geom_hline(aes(yintercept=middle[1]*0.48), color="darkgreen", linetype="dotdash") +
+  geom_ribbon(aes(ymin=ymin, ymax=ymax, fill=Assessment), alpha=0.15) +
+  geom_line(aes(y=middle, color=Assessment, linetype=Assessment)) + 
+  facet_grid(space="fixed", scales="free_y", rows=vars(HCR), cols=vars(Buffer, EMScenario)) +
+
+  ylim(0, 1.1) +
   scale_color_manual(values = rev(c("cadetblue",
                                     "#08306b",
                                     "#4292c6",
@@ -336,10 +355,21 @@ row2 <- ggplot(QDepl_EM, aes(x=Year, group=Assessment)) +
                                    "#3f007d" 
   ))) +  
   labs(y="EM Depl Only") +
-  theme(strip.text.x = element_blank(), axis.title.x = element_blank())
+  theme(strip.text.x = element_blank(), 
+        axis.title.x = element_blank(),
+        axis.text.x = element_text(size = 6),
+        legend.title = element_text(size = 8),
+        legend.text = element_text(size = 6))
 
-grid.arrange(row1, row2)
+depl <- grid.arrange(row1, row2)
 
+ggsave(filename = "Exp 1 Depletion.png", 
+       path="Plots/Experiment 1/",
+       plot=depl,
+       width=8.5,
+       height=5,
+       units="in",
+       dpi=300)
 
 # # Catch plots
 # QTAC <- OM_Out %>% 
