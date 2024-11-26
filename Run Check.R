@@ -1,4 +1,5 @@
 library(tidyverse)
+source("FUN/ratpackmse_R_FUN.R")
 
 # HCR <- c("SQ_HCR", "PI_HCR", "AC_HCR")
 # Buffer <- c("Buff05", "Buff25")
@@ -9,8 +10,10 @@ library(tidyverse)
 # write.csv(x=runs, file="MSE_Run_Tracker.csv")
 
 
-OM_Files <- list.files("E:/Experiment 1/RCA/Buff05/Reference Case A/Status Quo", full.names=T, recursive=T, pattern="BOC_results_1.out")
-EM_Files <- list.files("E:/Experiment 1/RCA/Buff05/Reference Case A/Status Quo", full.names=T, recursive=T, pattern="BOCtrace_plot.dat")
+OM_Files <- list.files(c("E:/Experiment 1/RCA/Buff05/Reference Case A/Status Quo", 
+                         "E:/Experiment 1/M/Buff05"), full.names=T, recursive=T, pattern="BOC_results_1.out")
+EM_Files <- list.files(c("E:/Experiment 1/RCA/Buff05/Reference Case A/Status Quo", 
+                                    "E:/Experiment 1/M/Buff05"), full.names=T, recursive=T, pattern="BOCtrace_plot.dat")
 FactorColNames <- c("Experiment", "EMFactor", "Buffer", "EMScenario", "HCR")
 
 x <- tidyFormat(OutDir="Data//Experiment 1//",
