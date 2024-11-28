@@ -141,19 +141,36 @@ tidy_pm_table <- bind_rows(AvgCatch,
                       RiskOFL)
 
 # Filling in the pm_table ####
-# Average Catch PM #### 
+
+# SQ_HCR Section ####
+
+## Average Catch PM #### 
+
+### Buff05 ####
 index1 <- grep("Status Quo", pm_table[,1]) + 1
 index2 <- grep("Phase-in", pm_table[,1]) - 2
 pm_table[index1:index2, "Median Avg Catch"] <- tidy_pm_table %>%
   filter(PM == "AvgCatch") %>%
   mutate(Median=`0.5`) %>%
   select(EMScenario, HCR, Buffer, Median) %>%
-  filter(HCR=="Status Quo") %>%
+  filter(HCR=="Status Quo" & Buffer == "Buff05") %>%
   select(Median) %>%
   reframe(round(Median, digits=0))
 
+### Buff25 ####
+index1 <- grep("Status Quo", pm_table[,1]) + 1
+index2 <- grep("Phase-in", pm_table[,1]) - 2
+pm_table[index1:index2, "Median Avg Catch2"] <- tidy_pm_table %>%
+  filter(PM == "AvgCatch") %>%
+  mutate(Median=`0.5`) %>%
+  select(EMScenario, HCR, Buffer, Median) %>%
+  filter(HCR=="Status Quo" & Buffer== "Buff25") %>%
+  select(Median) %>%
+  reframe(round(Median, digits=0))
 
-# IAV PM #### 
+## IAV PM #### 
+
+### Buff05 ####
 index1 <- grep("Status Quo", pm_table[,1]) + 1
 index2 <- grep("Phase-in", pm_table[,1]) - 2
 pm_table[index1:index2, "IAV"] <- tidy_pm_table %>%
@@ -164,8 +181,20 @@ pm_table[index1:index2, "IAV"] <- tidy_pm_table %>%
   select(Median) %>%
   reframe(round(Median, digits=3))
 
+### Buff25 ####
+index1 <- grep("Status Quo", pm_table[,1]) + 1
+index2 <- grep("Phase-in", pm_table[,1]) - 2
+pm_table[index1:index2, "IAV2"] <- tidy_pm_table %>%
+  filter(PM == "IAV") %>%
+  mutate(Median=`0.5`) %>%
+  select(EMScenario, HCR, Buffer, Median) %>%
+  filter(HCR=="Status Quo" & Buffer=="Buff25") %>%
+  select(Median) %>%
+  reframe(round(Median, digits=3))
 
-# AAV PM ####
+## AAV PM ####
+
+### Buff05 ####
 index1 <- grep("Status Quo", pm_table[,1]) + 1
 index2 <- grep("Phase-in", pm_table[,1]) - 2
 pm_table[index1:index2, "AAV"] <- tidy_pm_table %>%
@@ -176,7 +205,19 @@ pm_table[index1:index2, "AAV"] <- tidy_pm_table %>%
   select(Median) %>%
   reframe(round(Median, digits=3))
 
-# Catch SD PM ####
+### Buff25 ####
+index1 <- grep("Status Quo", pm_table[,1]) + 1
+index2 <- grep("Phase-in", pm_table[,1]) - 2
+pm_table[index1:index2, "AAV2"] <- tidy_pm_table %>%
+  filter(PM == "AAV") %>%
+  mutate(Median=`0.5`) %>%
+  select(EMScenario, HCR, Buffer, Median) %>%
+  filter(HCR=="Status Quo") %>%
+  select(Median) %>%
+  reframe(round(Median, digits=3))
+
+### Buff05 ####
+## Catch SD PM ####
 index1 <- grep("Status Quo", pm_table[,1]) + 1
 index2 <- grep("Phase-in", pm_table[,1]) - 2
 pm_table[index1:index2, "Catch SD"] <- tidy_pm_table %>%
@@ -186,7 +227,18 @@ pm_table[index1:index2, "Catch SD"] <- tidy_pm_table %>%
   select(SDC) %>%
   reframe(round(SDC, digits=0))
 
-# Pr(OFL=0) PM ####
+### Buff25 ####
+index1 <- grep("Status Quo", pm_table[,1]) + 1
+index2 <- grep("Phase-in", pm_table[,1]) - 2
+pm_table[index1:index2, "Catch SD2"] <- tidy_pm_table %>%
+  filter(PM == "Catch SD") %>%
+  select(EMScenario, HCR, Buffer, SDC) %>%
+  filter(HCR=="Status Quo") %>%
+  select(SDC) %>%
+  reframe(round(SDC, digits=0))
+
+## Pr(OFL=0) PM ####
+### Buff05 ####
 index1 <- grep("Status Quo", pm_table[,1]) + 1
 index2 <- grep("Phase-in", pm_table[,1]) - 2
 pm_table[index1:index2, "Pr(OFL=0) (%)"] <- tidy_pm_table %>%
@@ -197,7 +249,19 @@ pm_table[index1:index2, "Pr(OFL=0) (%)"] <- tidy_pm_table %>%
   select(Median) %>%
   reframe(round(Median, digits=3))
 
-# Pr(SSB<0.2) PM ####
+### Buff25 ####
+index1 <- grep("Status Quo", pm_table[,1]) + 1
+index2 <- grep("Phase-in", pm_table[,1]) - 2
+pm_table[index1:index2, "Pr(OFL=0) (%)2"] <- tidy_pm_table %>%
+  filter(PM == "Pr(OFL=0)") %>%
+  mutate(Median=`0.5`) %>%
+  select(EMScenario, HCR, Buffer, Median) %>%
+  filter(HCR=="Status Quo") %>%
+  select(Median) %>%
+  reframe(round(Median, digits=3))
+
+## Pr(SSB<0.2) PM ####
+### Buff05 ####
 index1 <- grep("Status Quo", pm_table[,1]) + 1
 index2 <- grep("Phase-in", pm_table[,1]) - 2
 pm_table[index1:index2, "Pr(SSB<LRP) (%)"] <- tidy_pm_table %>%
@@ -208,7 +272,19 @@ pm_table[index1:index2, "Pr(SSB<LRP) (%)"] <- tidy_pm_table %>%
   select(Median) %>%
   reframe(round(Median, digits=3))
 
-# Depletion PM ####
+### Buff25 ####
+index1 <- grep("Status Quo", pm_table[,1]) + 1
+index2 <- grep("Phase-in", pm_table[,1]) - 2
+pm_table[index1:index2, "Pr(SSB<LRP) (%)2"] <- tidy_pm_table %>%
+  filter(PM == "Pr(SSB<0.2)") %>%
+  mutate(Median=`0.5`) %>%
+  select(EMScenario, HCR, Buffer, Median) %>%
+  filter(HCR=="Status Quo") %>%
+  select(Median) %>%
+  reframe(round(Median, digits=3))
+
+## Depletion PM ####
+### Buff05 ####
 index1 <- grep("Status Quo", pm_table[,1]) + 1
 index2 <- grep("Phase-in", pm_table[,1]) - 2
 pm_table[index1:index2, "Depletion"] <- tidy_pm_table %>%
@@ -219,4 +295,13 @@ pm_table[index1:index2, "Depletion"] <- tidy_pm_table %>%
   select(Median) %>%
   reframe(round(Median, digits=3))
 
- 
+### Buff25 ####
+index1 <- grep("Status Quo", pm_table[,1]) + 1
+index2 <- grep("Phase-in", pm_table[,1]) - 2
+pm_table[index1:index2, "Depletion2"] <- tidy_pm_table %>%
+  filter(PM == "Depletion") %>%
+  mutate(Median=`0.5`) %>%
+  select(EMScenario, HCR, Buffer, Median) %>%
+  filter(HCR=="Status Quo") %>%
+  select(Median) %>%
+  reframe(round(Median, digits=3))
