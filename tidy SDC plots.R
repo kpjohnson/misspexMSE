@@ -23,12 +23,14 @@ EM_Out$HCR <- factor(x=EM_Out$HCR, levels=c("Status Quo", "Phase-in", "ABC Const
 EM_Out$EMScenario <- factor(x=EM_Out$EMScenario, levels=c("Reference Case A", "Reference Case B", "Reference Case C", "UnderM", "OverM"))
 EM_Out$Buffer <- factor(x=EM_Out$Buffer, levels=c("Buff05", "Buff25"))
 
+# Experiment 1, M, Buff05 ####
 tidySDC(OM_Out = OM_Out,
         EM_Out = EM_Out,
         experiment = "Experiment 1",
         EMfactor = "M",
         buffer = "Buff05")
 
+# Experiment 1, M, Buff25 ####
 tidySDC(OM_Out = OM_Out,
         EM_Out = EM_Out,
         experiment = "Experiment 1",
